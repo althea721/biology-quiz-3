@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生物演化互動模擬試卷</title>
+    <style>
+        :root {
+            --forest-green: #2d5a27;
+            --leaf-green: #a8c69f;
+            --bg-color: #f8fbf8;
+            --text-color: #333;
+            --white: #ffffff;
+            --error: #d9534f;
+            --success: #5cb85c;
+        }
+
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: auto; background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1, h2 { color: var(--forest-green); }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--leaf-green); padding-bottom: 10px; }
+        .tab-btn { padding: 10px 20px; border: none; background: var(--leaf-green); cursor: pointer; border-radius: 10px; font-weight: bold; }
+        .tab-btn.active { background: var(--forest-green); color: white; }
+        .locked { opacity: 0.5; pointer-events: none; }
+
+        .score-board { position: fixed; top: 20px; right: 20px; background: var(--forest-green); color: white; padding: 15px; border-radius: 50px; font-weight: bold; }
+        
+        .question { margin-bottom: 25px; padding: 15px; border: 1px solid #eee; border-radius: 15px; }
+        .option { display: block; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; }
+        .correct { background-color: var(--success) !important; color: white; }
+        .wrong { background-color: var(--error) !important; color: white; }
+        
+        .explanation { display: none; font-size: 0.9em; margin-top: 10px; padding: 10px; background: #eef; border-radius: 5px; }
+        .btn-submit { background: var(--forest-green); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="score-board" id="scoreBoard">得分：0</div>
+
+<div class="container">
+    <h1>演化學挑戰賽</h1>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('tab1')">素養挑戰</button>
+        <button class="tab-btn" onclick="showTab('tab2')">關鍵機制</button>
+        <button class="tab-btn" onclick="showTab('tab3')">思辨練習</button>
+        <button class="tab-btn locked" id="tab4-btn" onclick="showTab('tab4')">🔍 演化概念心智圖</button>
+    </div>
+
+    <div id="tab1" class="tab-content">
+        <div class="question" data-correct="A">
+            <p><strong>1. 素養情境：</strong>工業革命時期，英國樺尺蛾因樹幹被煤煙燻黑，體色變異的比例發生了顯著變化。下列何者最能說明此現象的演化機制？</p>
+            <div class="option" onclick="check(this, 'A')">A. 環境改變導致天擇，深色個體存活率較高</div>
+            <div class="option" onclick="check(this, 'B')">B. 蛾為了適應環境，主動改變基因表現</div>
+            <div class="explanation">解析：天擇是基於族群中既有的變異，而非個體的自主調整。</div>
+        </div>
+        <button class="btn-submit" onclick="submitExam()">提交試卷</button>
+    </div>
+
+    <div id="tab4" class="tab-content" style="display:none;">
+        <h2>演化概念心智圖</h2>
+        <ul>
+            <li>達爾文與華萊士：共同提出天擇說</li>
+            <li>天擇機制：變異、遺傳、競爭、適應</li>
+            <li><strong>⚠️ 迷思警告：</strong>長頸鹿脖子是因為個體使用而變長？（❌ 錯誤！是族群中頸部較長者有生存優勢，經代代累積）</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+    }
+
+    function check(el, choice) {
+        const question = el.parentElement;
+        const correct = question.getAttribute('data-correct');
+        if (choice === correct) {
+            el.classList.add('correct');
+        } else {
+            el.classList.add('wrong');
+        }
+        question.querySelector('.explanation').style.display = 'block';
+    }
+
+    function submitExam() {
+        document.getElementById('scoreBoard').innerText = "得分：100/100！太棒了！";
+        const lockBtn = document.getElementById('tab4-btn');
+        lockBtn.classList.remove('locked');
+        alert("恭喜完成挑戰！心智圖已解鎖。");
+    }
+</script>
+
+</body>
+</html>
